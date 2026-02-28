@@ -1,0 +1,131 @@
+.wrapper {
+  position: relative;
+  width: 100%;
+  max-width: 438px;
+  min-width: 0;
+}
+
+.searchBox {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  min-width: 0;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-sm);
+  transition: box-shadow var(--transition), border-color var(--transition);
+}
+
+.searchBox:focus-within {
+  border-color: var(--border-hover);
+  box-shadow: var(--shadow-md);
+}
+
+.input {
+  flex: 1;
+  min-width: 0;
+  padding: 12px 16px;
+  font-size: 16px;
+  min-height: 44px;
+  touch-action: manipulation;
+  font-family: inherit;
+  background: transparent;
+  border: none;
+  color: var(--text);
+  outline: none;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.input::placeholder {
+  color: var(--text-muted);
+}
+
+.results {
+  position: absolute;
+  top: calc(100% + 10px);
+  left: 0;
+  right: 0;
+  max-height: min(400px, 70vh);
+  overflow-y: auto;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+  z-index: 1000;
+  animation: dropdownIn var(--transition-fast);
+}
+
+.empty {
+  padding: 24px;
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 14px;
+  margin: 0;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  width: 100%;
+  padding: 12px 16px;
+  min-height: 48px;
+  font-family: inherit;
+  text-align: left;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid var(--border-subtle);
+  cursor: pointer;
+  transition: background var(--transition), color var(--transition);
+}
+
+.row:last-child { border-bottom: none; }
+
+.row:hover:not(:disabled) {
+  background: var(--surface-hover);
+}
+
+.row:disabled {
+  cursor: default;
+  opacity: 0.8;
+}
+
+.info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.city {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.id {
+  font-size: 12px;
+  color: var(--text-muted);
+  font-family: ui-monospace, monospace;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.add {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--accent);
+}
+
+.added {
+  font-size: 13px;
+  color: var(--text-muted);
+}

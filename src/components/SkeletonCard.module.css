@@ -1,0 +1,58 @@
+.card {
+  padding: 20px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+}
+
+.header { display: flex; justify-content: space-between; margin-bottom: 12px; }
+
+.city {
+  width: 100px;
+  height: 18px;
+  background: var(--skeleton);
+  border-radius: var(--radius-sm);
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+.fav {
+  width: 32px;
+  height: 32px;
+  background: var(--skeleton);
+  border-radius: var(--radius);
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+.time {
+  width: 140px;
+  height: 32px;
+  background: var(--skeleton);
+  border-radius: var(--radius-sm);
+  margin-bottom: 12px;
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+.meta {
+  width: 80px;
+  height: 14px;
+  background: var(--skeleton);
+  border-radius: var(--radius-sm);
+  margin-bottom: 14px;
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+.footer {
+  width: 60%;
+  height: 12px;
+  background: var(--skeleton);
+  border-radius: var(--radius-sm);
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid var(--border-subtle);
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: .6; }
+  50% { opacity: 1; }
+}

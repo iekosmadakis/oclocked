@@ -1,0 +1,110 @@
+import { useState, useEffect, useMemo, useCallback, useRef } from 'react'
+import { getTimezoneSearchList, searchTimezones } from '../utils/timezone'
+import { FAVORITES_EVENT } from '../constants'
+import { addFavorite, getFavorites } from '../store/FavoritesStore'
+import type { TimezoneItem } from '../types/timezone'
+import styles from './SearchBar.module.css'
+
+interface SearchBarProps {
+  onAddTimezone: (item: TimezoneItem) => void
+}
+
+/** Builds a TimezoneItem from IANA ID and city name. */
+function tzToItem(id: string, city: string): TimezoneItem {
+  const region = id.split('/')[0] ?? 'Other'
+  return {
+    id,
+    city: city.replace(/\b\w/g, (c) => c.toUpperCase()),
+    region,
+    popularityRank: 999,
+  }
+}
+
+/** Search input with dropdown to add IANA timezones to the list. */
+export function SearchBar({ onAddTimezone }: SearchBarProps) {
+  const [query, setQuery] = useState('')
+  const [allTimezones, setAllTimezones] = useState<{ id: string; city: string }[]>([])
+  const [focused, setFocused] = useState(false)
+  const wrapperRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    setAllTimezones(getTimezoneSearchList())
+  }, [])
+
+  const results = useMemo(
+    () => searchTimezones(query, allTimezones, 20),
+    [query, allTimezones]
+  )
+
+  const showResults = focused && query.trim().length > 0
+  const favorites = getFavorites()
+
+  const handleAdd = useCallback(
+    (id: string, city: string) => {
+      addFavorite(id)
+      onAddTimezone(tzToItem(id, city))
+      window.dispatchEvent(new Event(FAVORITES_EVENT))
+      setQuery('')
+    },
+    [onAddTimezone]
+  )
+
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (wrapperRef.current && !wrapperRef.current.contains(e.target as Node)) {
+        setFocused(false)
+      }
+    }
+    document.addEventListener('mousedown', handleClickOutside)
+    return () => document.removeEventListener('mousedown', handleClickOutside)
+  }, [])
+
+  return (
+    <div className={styles.wrapper} ref={wrapperRef}>
+      <div className={styles.searchBox}>
+        <input
+          type="search"
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+          onFocus={() => setFocused(true)}
+          placeholder="Search by city or ID"
+          className={styles.input}
+          aria-label="Search timezones"
+          aria-autocomplete="list"
+          aria-expanded={showResults}
+        />
+      </div>
+      {showResults && (
+        <div className={styles.results} role="listbox">
+          {results.length === 0 ? (
+            <p className={styles.empty}>No timezones found</p>
+          ) : (
+            results.map((tz) => {
+              const alreadyAdded = favorites.includes(tz.id)
+              return (
+                <button
+                  key={`${tz.id}|${tz.city}`}
+                  type="button"
+                  role="option"
+                  className={styles.row}
+                  onClick={() => handleAdd(tz.id, tz.city)}
+                  disabled={alreadyAdded}
+                >
+                  <div className={styles.info}>
+                    <span className={styles.city}>{tz.city}</span>
+                    <span className={styles.id}>{tz.id}</span>
+                  </div>
+                  {alreadyAdded ? (
+                    <span className={styles.added}>Added</span>
+                  ) : (
+                    <span className={styles.add}>Add</span>
+                  )}
+                </button>
+              )
+            })
+          )}
+        </div>
+      )}
+    </div>
+  )
+}

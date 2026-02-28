@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <script>
+      (function(){
+        try {
+          var key = 'oclocked-settings';
+          var legacy = localStorage.getItem('zonest-settings');
+          if (legacy) { localStorage.setItem(key, legacy); localStorage.removeItem('zonest-settings'); }
+          var s = localStorage.getItem(key);
+          var theme = 'system';
+          if (s) { var p = JSON.parse(s); theme = p.theme || theme; }
+          var resolved = theme === 'system'
+            ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light')
+            : theme;
+          document.documentElement.setAttribute('data-theme', resolved);
+        } catch {}
+      })();
+    </script>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="description" content="OClocked – A minimal timezone dashboard for viewing and comparing time zones across the world. Search, favorite, and sort timezones by region." />
+    <title>OClocked – Timezone Dashboard</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

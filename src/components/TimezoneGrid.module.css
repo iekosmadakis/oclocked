@@ -1,0 +1,38 @@
+.wrapper { display: flex; flex-direction: column; gap: 40px; }
+
+.section { display: flex; flex-direction: column; gap: 20px; }
+
+.sectionHeader {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.region {
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: .1em;
+  color: var(--text-muted);
+  margin: 0;
+  flex-shrink: 0;
+}
+
+.ruler {
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(
+    to right,
+    var(--border) 0%,
+    var(--border-subtle) 100%
+  );
+}
+
+.empty {
+  padding: 56px 32px;
+  text-align: center;
+  color: var(--text-muted);
+  min-height: 240px;
+}
+
+.emptyHint { font-size: 15px; margin-top: 12px; }
