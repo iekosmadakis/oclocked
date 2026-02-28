@@ -19,11 +19,11 @@ OClocked provides a clean interface to browse cities by region, compare local ti
 
 ## Tech Stack
 
-- React 19, TypeScript
+- React, TypeScript
 - Vite
-- date-fns, date-fns-tz
-- CSS Modules
-- localStorage (favorites, settings)
+- Intl API
+- CSS Modules, CSS custom properties
+- localStorage (for favorites and settings)
 
 ## Development
 
