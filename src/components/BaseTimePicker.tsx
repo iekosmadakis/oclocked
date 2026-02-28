@@ -1,6 +1,27 @@
 import { useState, useEffect } from 'react'
-import { format } from 'date-fns'
 import styles from './BaseTimePicker.module.css'
+
+function fmtDate(d: Date): string {
+  return d.toLocaleDateString('en-CA', { year: 'numeric', month: '2-digit', day: '2-digit' })
+}
+
+function fmtTime(d: Date, use24h: boolean): string {
+  return d.toLocaleTimeString('en-US', {
+    hour: 'numeric',
+    minute: '2-digit',
+    hour12: !use24h,
+  })
+}
+
+function fmtDateTime(d: Date, use24h: boolean): string {
+  return d.toLocaleString('en-US', {
+    month: 'short',
+    day: 'numeric',
+    hour: 'numeric',
+    minute: '2-digit',
+    hour12: !use24h,
+  })
+}
 
 interface BaseTimePickerProps {
   baseTime: Date
@@ -9,7 +30,6 @@ interface BaseTimePickerProps {
   isLive?: boolean
 }
 
-/** Picker for base time: live "Now" or custom date/time. */
 export function BaseTimePicker({
   baseTime,
   onBaseTimeChange,
@@ -17,23 +37,21 @@ export function BaseTimePicker({
   isLive = true,
 }: BaseTimePickerProps) {
   const [isExpanded, setIsExpanded] = useState(false)
-  const [dateStr, setDateStr] = useState(format(baseTime, 'yyyy-MM-dd'))
-  const [timeStr, setTimeStr] = useState(
-    format(baseTime, use24h ? 'HH:mm' : 'h:mm a')
-  )
+  const [dateStr, setDateStr] = useState(() => fmtDate(baseTime))
+  const [timeStr, setTimeStr] = useState(() => fmtTime(baseTime, use24h))
 
   useEffect(() => {
     if (isExpanded) {
-      setDateStr(format(baseTime, 'yyyy-MM-dd'))
-      setTimeStr(format(baseTime, use24h ? 'HH:mm' : 'h:mm a'))
+      setDateStr(fmtDate(baseTime))
+      setTimeStr(fmtTime(baseTime, use24h))
     }
   }, [isExpanded, baseTime, use24h])
 
   const handleUseNow = () => {
     const now = new Date()
     onBaseTimeChange(now, true)
-    setDateStr(format(now, 'yyyy-MM-dd'))
-    setTimeStr(format(now, use24h ? 'HH:mm' : 'h:mm a'))
+    setDateStr(fmtDate(now))
+    setTimeStr(fmtTime(now, use24h))
     setIsExpanded(false)
   }
 
@@ -64,7 +82,7 @@ export function BaseTimePicker({
         setIsExpanded(false)
       }
     } catch {
-      // Invalid date
+      /* invalid */
     }
   }
 
@@ -79,9 +97,9 @@ export function BaseTimePicker({
         <span className={styles.label}>Base time</span>
         <span className={styles.value}>
           {isLive ? (
-            <>Now · {format(baseTime, use24h ? 'HH:mm' : 'h:mm a')}</>
+            <>Now · {fmtTime(baseTime, use24h)}</>
           ) : (
-            format(baseTime, use24h ? 'MMM d, HH:mm' : 'MMM d, h:mm a')
+            fmtDateTime(baseTime, use24h)
           )}
         </span>
       </button>

@@ -28,7 +28,7 @@ export function SearchBar({ onAddTimezone }: SearchBarProps) {
   const wrapperRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
-    setAllTimezones(getTimezoneSearchList())
+    getTimezoneSearchList().then(setAllTimezones)
   }, [])
 
   const results = useMemo(
