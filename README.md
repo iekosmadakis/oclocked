@@ -23,7 +23,7 @@ OClocked provides a clean interface to browse cities by region, compare local ti
 - Vite
 - Intl API
 - CSS Modules, CSS custom properties
-- localStorage (for favorites and settings)
+- localStorage (favorites and settings)
 
 ## Development
 
