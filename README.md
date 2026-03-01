@@ -1,21 +1,24 @@
 # OClocked
 
-A minimal timezone dashboard for viewing and comparing time zones across the world.
+A timezone dashboard for viewing, comparing, and converting time zones across the world.
 
 ## Overview
 
-OClocked provides a clean interface to browse cities by region, compare local times, and manage favorite timezones. All lists are ordered by city population (metro area) unless sorted alphabetically.
+OClocked provides a dense, developer-focused interface to browse cities by region, compare local times, convert between timezones, and plan meetings across time zones. All lists are ordered by city population (metro area) unless sorted alphabetically.
 
 ## Features
 
-- **Popular tab**: Curated cities (Europe 21, Americas 21, Asia 12, Africa 9, Oceania 6)
-- **All tab**: Extended list (Europe 84, Americas 51, Asia 40, Africa 27, Oceania 15)
+- **Popular tab**: Curated cities across Europe, Americas, Africa, Asia, and Oceania
+- **All tab**: Extended list of cities across all regions
 - **Favorites**: Save timezones for quick access; persisted in localStorage
 - **Search**: Add any IANA timezone via inline search
+- **Timezone converter**: Convert between common timezone abbreviations (EST, UTC, PST, etc.) in the sidebar
+- **Meeting planner**: Drag a time slider to shift all cards simultaneously and find overlapping hours
+- **Time difference**: Each card shows relative offset from your local time (+3h, -5h, same)
 - **Base time**: Live mode or custom date/time; 12h and 24h format
 - **Sort**: By population or alphabetical
 - **Theme**: Light, dark, or system preference
-- **Responsive**: Collapsible sidebar on smaller screens; mobile-friendly layout
+- **Responsive**: Collapsible sidebar on desktop; mobile-friendly layout
 
 ## Tech Stack
 
@@ -23,7 +26,7 @@ OClocked provides a clean interface to browse cities by region, compare local ti
 - Vite
 - Intl API
 - CSS Modules, CSS custom properties
-- localStorage (favorites and settings)
+- localStorage
 
 ## Development
 
@@ -71,11 +74,12 @@ For subdirectory deployment, set `base` in `vite.config.ts` before building.
 ```
 src/
   components/     UI components (TopBar, TimezoneGrid, Sidebar, etc.)
+  hooks/          Shared hooks (useClickOutside)
   constants.ts    Shared constants (events, region order, storage keys)
   data/           Timezone lists (popular, all) and lookup map
   store/          localStorage stores (favorites, settings) with legacy migration
   types/          TypeScript interfaces
-  utils/          Timezone formatting, validation, and search
+  utils/          Timezone formatting, conversion, validation, and search
   App.tsx         Root component
   main.tsx        Entry point
   index.css       Global styles and design tokens

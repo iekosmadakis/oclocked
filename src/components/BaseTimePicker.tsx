@@ -30,6 +30,7 @@ interface BaseTimePickerProps {
   isLive?: boolean
 }
 
+/** Date/time picker for setting the base comparison time. */
 export function BaseTimePicker({
   baseTime,
   onBaseTimeChange,
@@ -81,9 +82,7 @@ export function BaseTimePicker({
         onBaseTimeChange(date, false)
         setIsExpanded(false)
       }
-    } catch {
-      /* invalid */
-    }
+    } catch { /* invalid input */ }
   }
 
   return (
@@ -130,11 +129,7 @@ export function BaseTimePicker({
               <button type="button" onClick={handleUseNow} className={styles.btn}>
                 Use now
               </button>
-              <button
-                type="button"
-                onClick={handleApply}
-                className={styles.btnPrimary}
-              >
+              <button type="button" onClick={handleApply} className={styles.btnPrimary}>
                 Apply
               </button>
             </div>

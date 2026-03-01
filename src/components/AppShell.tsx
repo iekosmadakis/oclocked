@@ -1,9 +1,10 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import { TopBar } from './TopBar'
 import { Sidebar } from './Sidebar'
 import { SegmentedTabs, type TabId } from './SegmentedTabs'
 import { SortSelect } from './SortSelect'
 import { TimezoneGrid } from './TimezoneGrid'
+import { TimeSlider } from './TimeSlider'
 import { SkeletonCard } from './SkeletonCard'
 import type { TimezoneItem } from '../types/timezone'
 import type { SortOption } from '../utils/timezone'
@@ -30,7 +31,6 @@ interface AppShellProps {
   userTimezone: string
 }
 
-/** Resolves display items for the active tab. Favorites merge ALL_LOOKUP + custom. */
 function getDisplayItems(
   activeTab: TabId,
   favorites: string[],
@@ -69,7 +69,7 @@ function getDisplayItems(
   return all
 }
 
-/** Main layout: TopBar, toolbar (tabs + sort), content grid, and sidebar. */
+/** Main layout: TopBar, toolbar, time slider, content grid, and sidebar. */
 export function AppShell({
   baseTime,
   onBaseTimeChange,
@@ -94,7 +94,10 @@ export function AppShell({
   }, [])
 
   const favorites = getFavorites()
-  const displayItems = getDisplayItems(activeTab, favorites, customTimezones)
+  const displayItems = useMemo(
+    () => getDisplayItems(activeTab, favorites, customTimezones),
+    [activeTab, favorites, customTimezones]
+  )
 
   return (
     <div className={styles.shell}>
@@ -117,6 +120,12 @@ export function AppShell({
             />
             <SortSelect value={sortBy} onChange={onSortChange} />
           </div>
+          <TimeSlider
+            baseTime={baseTime}
+            onBaseTimeChange={onBaseTimeChange}
+            isLive={isLive}
+            use24h={use24h}
+          />
           {isLoading ? (
             <div className="grid">
               {Array.from({ length: 12 }, (_, i) => (
@@ -133,7 +142,7 @@ export function AppShell({
             />
           )}
         </div>
-        <Sidebar baseTime={baseTime} />
+        <Sidebar baseTime={baseTime} use24h={use24h} />
       </main>
       <footer className={styles.footer}>
         <p className={styles.tagline}>Because time is precious. Time zone math shouldn't be.</p>

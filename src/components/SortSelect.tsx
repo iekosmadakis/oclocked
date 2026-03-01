@@ -1,9 +1,10 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState, useCallback, useRef, useEffect } from 'react'
 import type { SortOption } from '../utils/timezone'
+import { useClickOutside } from '../hooks/useClickOutside'
 import styles from './SortSelect.module.css'
 
 const OPTIONS: { value: SortOption; label: string; title?: string }[] = [
-  { value: 'default', label: 'By population', title: 'Ordered by city population (city size)' },
+  { value: 'default', label: 'By population', title: 'Ordered by city population' },
   { value: 'alphabetical', label: 'Alphabetical' },
 ]
 
@@ -12,7 +13,7 @@ interface SortSelectProps {
   onChange: (v: SortOption) => void
 }
 
-/** Dropdown for selecting timezone sort order (by population, alphabetical). */
+/** Dropdown for selecting timezone sort order. */
 export function SortSelect({ value, onChange }: SortSelectProps) {
   const [isOpen, setIsOpen] = useState(false)
   const wrapperRef = useRef<HTMLDivElement>(null)
@@ -21,23 +22,13 @@ export function SortSelect({ value, onChange }: SortSelectProps) {
   const label = current?.label ?? value
   const sortHint = current?.title
 
+  useClickOutside(wrapperRef, useCallback(() => setIsOpen(false), []), isOpen)
+
   useEffect(() => {
-    const handleClickOutside = (e: MouseEvent) => {
-      if (wrapperRef.current && !wrapperRef.current.contains(e.target as Node)) {
-        setIsOpen(false)
-      }
-    }
-    const handleEscape = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') setIsOpen(false)
-    }
-    if (isOpen) {
-      document.addEventListener('mousedown', handleClickOutside)
-      document.addEventListener('keydown', handleEscape)
-    }
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside)
-      document.removeEventListener('keydown', handleEscape)
-    }
+    if (!isOpen) return
+    const onEscape = (e: KeyboardEvent) => { if (e.key === 'Escape') setIsOpen(false) }
+    document.addEventListener('keydown', onEscape)
+    return () => document.removeEventListener('keydown', onEscape)
   }, [isOpen])
 
   return (

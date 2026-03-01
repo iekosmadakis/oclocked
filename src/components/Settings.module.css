@@ -1,8 +1,8 @@
 .wrapper { position: relative; }
 
 .trigger {
-  width: 44px;
-  min-height: 44px;
+  width: 36px;
+  min-height: 36px;
   touch-action: manipulation;
   display: flex;
   align-items: center;
@@ -11,7 +11,7 @@
   border: 1px solid var(--border);
   border-radius: var(--radius);
   cursor: pointer;
-  font-size: 18px;
+  font-size: 16px;
   color: var(--text-muted);
   transition: background var(--transition), color var(--transition), border-color var(--transition);
 }
@@ -30,11 +30,11 @@
 
 .dropdown {
   position: absolute;
-  top: calc(100% + 10px);
+  top: calc(100% + 6px);
   right: 0;
-  min-width: 200px;
-  max-width: min(280px, 100vw - 32px);
-  padding: 16px;
+  min-width: 180px;
+  max-width: min(260px, 100vw - 32px);
+  padding: 12px;
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
@@ -43,25 +43,25 @@
   animation: dropdownIn var(--transition-fast);
 }
 
-.section { margin-bottom: 16px; }
+.section { margin-bottom: 12px; }
 .section:last-child { margin-bottom: 0; }
 
 .label {
   display: block;
-  font-size: 11px;
+  font-size: 10px;
   font-weight: 600;
   text-transform: uppercase;
-  letter-spacing: .05em;
+  letter-spacing: .06em;
   color: var(--text-muted);
-  margin-bottom: 8px;
+  margin-bottom: 6px;
 }
 
-.toggleGroup { display: flex; gap: 6px; }
+.toggleGroup { display: flex; gap: 4px; }
 
 .toggleGroup button {
   flex: 1;
-  padding: 8px 12px;
-  font-size: 13px;
+  padding: 5px 8px;
+  font-size: 12px;
   font-family: inherit;
   background: var(--bg);
   border: 1px solid var(--border);

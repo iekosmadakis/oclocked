@@ -1,8 +1,10 @@
+import { memo } from 'react'
 import type { TimezoneItem } from '../types/timezone'
 import {
   getTimeInTimezone,
   getDateInTimezone,
   getUtcOffset,
+  getTimeDiffHours,
   isDaytime,
   isDst,
 } from '../utils/timezone'
@@ -13,16 +15,29 @@ interface TimezoneCardProps {
   baseTime: Date
   use24h: boolean
   userDate: string
+  userTimezone: string
   isFavorite: boolean
   onToggleFavorite: () => void
 }
 
-/** Card displaying a single timezone with time, offset, DST, and favorite toggle. */
-export function TimezoneCard({
+function formatDiff(hours: number): string {
+  if (hours === 0) return 'same'
+  const sign = hours > 0 ? '+' : ''
+  return Number.isInteger(hours) ? `${sign}${hours}h` : `${sign}${hours.toFixed(1)}h`
+}
+
+function diffClass(hours: number): string {
+  if (hours === 0) return styles.diffSame
+  return hours > 0 ? styles.diffAhead : styles.diffBehind
+}
+
+/** Card displaying a single timezone with time, offset, diff, and favorite toggle. */
+export const TimezoneCard = memo(function TimezoneCard({
   item,
   baseTime,
   use24h,
   userDate,
+  userTimezone,
   isFavorite,
   onToggleFavorite,
 }: TimezoneCardProps) {
@@ -31,6 +46,7 @@ export function TimezoneCard({
   const offset = getUtcOffset(baseTime, item.id)
   const day = isDaytime(baseTime, item.id)
   const dst = isDst(baseTime, item.id)
+  const diffHours = getTimeDiffHours(baseTime, item.id, userTimezone)
   const showDate = date !== userDate
 
   return (
@@ -49,14 +65,15 @@ export function TimezoneCard({
       <div className={styles.time}>{time}</div>
       <div className={styles.meta}>
         <span className={styles.offset}>{offset}</span>
+        {diffHours !== null && (
+          <span className={`${styles.diff} ${diffClass(diffHours)}`}>
+            {formatDiff(diffHours)}
+          </span>
+        )}
         {dst && <span className={styles.dst}>DST</span>}
       </div>
       <div className={styles.footer}>
-        <span
-          className={styles.dayNight}
-          title={day ? 'Day' : 'Night'}
-          aria-hidden
-        >
+        <span className={styles.dayNight} title={day ? 'Day' : 'Night'} aria-hidden>
           {day ? '☀' : '☽'}
         </span>
         <span className={styles.tzId}>{item.id}</span>
@@ -64,4 +81,4 @@ export function TimezoneCard({
       </div>
     </article>
   )
-}
+})

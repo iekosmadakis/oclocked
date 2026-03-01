@@ -5,6 +5,28 @@ const TIMEZONE_ALIASES: Record<string, string> = {
   'Pacific/Wellington': 'Pacific/Auckland',
 }
 
+/** Common timezone abbreviations mapped to IANA IDs. */
+export const TZ_ABBREVIATIONS: Record<string, string> = {
+  UTC: 'UTC',
+  GMT: 'Europe/London',
+  EST: 'America/New_York',
+  CST: 'America/Chicago',
+  MST: 'America/Denver',
+  PST: 'America/Los_Angeles',
+  CET: 'Europe/Paris',
+  EET: 'Europe/Athens',
+  IST: 'Asia/Kolkata',
+  JST: 'Asia/Tokyo',
+  KST: 'Asia/Seoul',
+  CST_CN: 'Asia/Shanghai',
+  AEST: 'Australia/Sydney',
+  NZST: 'Pacific/Auckland',
+  BRT: 'America/Sao_Paulo',
+  SGT: 'Asia/Singapore',
+  HKT: 'Asia/Hong_Kong',
+  GST: 'Asia/Dubai',
+}
+
 function resolveTimezoneId(id: string): string {
   return TIMEZONE_ALIASES[id] ?? id
 }
@@ -27,7 +49,7 @@ function formatPartsInZone(
   return new Intl.DateTimeFormat('en-US', { ...options, timeZone: id }).formatToParts(date)
 }
 
-export function isValidTimezone(_date: Date, timezoneId: string): boolean {
+export function isValidTimezone(timezoneId: string): boolean {
   try {
     const id = resolveTimezoneId(timezoneId)
     new Intl.DateTimeFormat('en-US', { timeZone: id }).format(new Date())
@@ -94,6 +116,18 @@ export function getUtcOffset(date: Date, timezoneId: string): string {
   return `UTC${sign}${pad(h)}:${pad(m)}`
 }
 
+/** Returns the offset difference in hours between two timezones (target - user). */
+export function getTimeDiffHours(
+  date: Date,
+  targetTz: string,
+  userTz: string
+): number | null {
+  const targetOff = getOffsetMinutes(date, targetTz)
+  const userOff = getOffsetMinutes(date, userTz)
+  if (targetOff === null || userOff === null) return null
+  return (targetOff - userOff) / 60
+}
+
 export function isDaytime(date: Date, timezoneId: string): boolean {
   try {
     const parts = formatPartsInZone(date, timezoneId, { hour: 'numeric' })
@@ -121,6 +155,45 @@ export function isDst(date: Date, timezoneId: string): boolean {
   }
 }
 
+/** Converts a time from one timezone to another, returning a formatted string. */
+export function convertTime(
+  date: Date,
+  fromTz: string,
+  toTz: string,
+  use24h: boolean
+): string {
+  try {
+    const fromId = resolveTimezoneId(fromTz)
+    const toId = resolveTimezoneId(toTz)
+
+    const fromParts = formatPartsInZone(date, fromId, {
+      year: 'numeric', month: '2-digit', day: '2-digit',
+      hour: '2-digit', minute: '2-digit', hour12: false,
+    })
+    const get = (type: string) => fromParts.find((p) => p.type === type)?.value ?? '0'
+    const fromDate = new Date(
+      parseInt(get('year')),
+      parseInt(get('month')) - 1,
+      parseInt(get('day')),
+      parseInt(get('hour')),
+      parseInt(get('minute'))
+    )
+
+    const fromOff = getOffsetMinutes(date, fromId)
+    const toOff = getOffsetMinutes(date, toId)
+    if (fromOff === null || toOff === null) return '--:--'
+
+    const adjusted = new Date(fromDate.getTime() + (toOff - fromOff) * 60000)
+    return adjusted.toLocaleTimeString('en-US', {
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: !use24h,
+    })
+  } catch {
+    return '--:--'
+  }
+}
+
 export async function getTimezoneSearchList(): Promise<{ id: string; city: string }[]> {
   try {
     if (typeof Intl.supportedValuesOf === 'function') {
@@ -132,9 +205,7 @@ export async function getTimezoneSearchList(): Promise<{ id: string; city: strin
         }))
       }
     }
-  } catch {
-    /* fall through */
-  }
+  } catch { /* fall through */ }
   const { ALL_TIMEZONES } = await import('../data/popularTimezones')
   const seen = new Set<string>()
   const list: { id: string; city: string }[] = []
