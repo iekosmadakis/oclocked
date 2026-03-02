@@ -53,7 +53,7 @@ export function TimeSlider({
     <div className={`${styles.slider} ${active || !isLive ? styles.active : ''}`}>
       <div className={styles.track}>
         <label className={styles.label}>
-          <span className={styles.labelText}>Meeting planner</span>
+          <span className={styles.labelText}>Time Shift</span>
           <span className={styles.time}>{formatHour(currentHalf, use24h)}</span>
         </label>
         <input

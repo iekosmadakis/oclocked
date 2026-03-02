@@ -155,9 +155,10 @@ export function isDst(date: Date, timezoneId: string): boolean {
   }
 }
 
-/** Converts a time from one timezone to another, returning a formatted string. */
+/** Converts an hour:minute from one timezone to another via offset arithmetic. */
 export function convertTime(
-  date: Date,
+  hour: number,
+  minute: number,
   fromTz: string,
   toTz: string,
   use24h: boolean
@@ -166,29 +167,22 @@ export function convertTime(
     const fromId = resolveTimezoneId(fromTz)
     const toId = resolveTimezoneId(toTz)
 
-    const fromParts = formatPartsInZone(date, fromId, {
-      year: 'numeric', month: '2-digit', day: '2-digit',
-      hour: '2-digit', minute: '2-digit', hour12: false,
-    })
-    const get = (type: string) => fromParts.find((p) => p.type === type)?.value ?? '0'
-    const fromDate = new Date(
-      parseInt(get('year')),
-      parseInt(get('month')) - 1,
-      parseInt(get('day')),
-      parseInt(get('hour')),
-      parseInt(get('minute'))
-    )
-
-    const fromOff = getOffsetMinutes(date, fromId)
-    const toOff = getOffsetMinutes(date, toId)
+    const ref = new Date()
+    const fromOff = getOffsetMinutes(ref, fromId)
+    const toOff = getOffsetMinutes(ref, toId)
     if (fromOff === null || toOff === null) return '--:--'
 
-    const adjusted = new Date(fromDate.getTime() + (toOff - fromOff) * 60000)
-    return adjusted.toLocaleTimeString('en-US', {
-      hour: '2-digit',
-      minute: '2-digit',
-      hour12: !use24h,
-    })
+    let totalMin = hour * 60 + minute + (toOff - fromOff)
+    totalMin = ((totalMin % 1440) + 1440) % 1440
+    const h = Math.floor(totalMin / 60)
+    const m = totalMin % 60
+
+    if (use24h) {
+      return `${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}`
+    }
+    const period = h >= 12 ? 'PM' : 'AM'
+    const h12 = h % 12 || 12
+    return `${h12.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')} ${period}`
   } catch {
     return '--:--'
   }

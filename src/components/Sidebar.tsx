@@ -25,7 +25,7 @@ export function Sidebar({ baseTime, use24h }: SidebarProps) {
   return (
     <aside className={styles.sidebar}>
       <div className={styles.converterSection}>
-        <TimezoneConverter baseTime={baseTime} use24h={use24h} />
+        <TimezoneConverter use24h={use24h} />
       </div>
       <h3 className={styles.title}>Popular timezones</h3>
       {SIDEBAR_REGIONS.map((region) => {

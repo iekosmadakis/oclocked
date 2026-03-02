@@ -3,24 +3,32 @@ import { TZ_ABBREVIATIONS, convertTime, isValidTimezone } from '../utils/timezon
 import styles from './TimezoneConverter.module.css'
 
 interface TimezoneConverterProps {
-  baseTime: Date
   use24h: boolean
 }
 
 const ABBR_ENTRIES = Object.entries(TZ_ABBREVIATIONS)
 
-/** Compact timezone converter widget with From/To dropdowns. */
-export function TimezoneConverter({ baseTime, use24h }: TimezoneConverterProps) {
+function currentHHMM(): string {
+  const now = new Date()
+  return `${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}`
+}
+
+/** Compact timezone converter with a dedicated time input. */
+export function TimezoneConverter({ use24h }: TimezoneConverterProps) {
   const [fromTz, setFromTz] = useState('UTC')
   const [toTz, setToTz] = useState('EST')
+  const [time, setTime] = useState(currentHHMM)
 
   const fromIana = TZ_ABBREVIATIONS[fromTz] ?? fromTz
   const toIana = TZ_ABBREVIATIONS[toTz] ?? toTz
 
+  const [hour, minute] = time.split(':').map(Number)
+
   const result = useMemo(() => {
+    if (isNaN(hour) || isNaN(minute)) return '--:--'
     if (!isValidTimezone(fromIana) || !isValidTimezone(toIana)) return '--:--'
-    return convertTime(baseTime, fromIana, toIana, use24h)
-  }, [baseTime, fromIana, toIana, use24h])
+    return convertTime(hour, minute, fromIana, toIana, use24h)
+  }, [hour, minute, fromIana, toIana, use24h])
 
   const handleSwap = () => {
     setFromTz(toTz)
@@ -31,6 +39,15 @@ export function TimezoneConverter({ baseTime, use24h }: TimezoneConverterProps) 
     <div className={styles.converter}>
       <div className={styles.header}>
         <span className={styles.title}>Convert</span>
+      </div>
+      <div className={styles.timeRow}>
+        <label className={styles.label}>Time</label>
+        <input
+          type="time"
+          className={styles.timeInput}
+          value={time}
+          onChange={(e) => setTime(e.target.value)}
+        />
       </div>
       <div className={styles.row}>
         <div className={styles.field}>

@@ -17,6 +17,27 @@
   color: var(--text-muted);
 }
 
+.timeRow {
+  margin-bottom: 10px;
+}
+
+.timeInput {
+  width: 100%;
+  padding: 5px 6px;
+  font-size: 13px;
+  font-family: var(--font-mono);
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  color: var(--text);
+  transition: border-color var(--transition);
+}
+
+.timeInput:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+
 .row {
   display: flex;
   align-items: flex-end;

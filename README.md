@@ -13,7 +13,7 @@ OClocked provides a dense, developer-focused interface to browse cities by regio
 - **Favorites**: Save timezones for quick access; persisted in localStorage
 - **Search**: Add any IANA timezone via inline search
 - **Timezone converter**: Convert between common timezone abbreviations (EST, UTC, PST, etc.) in the sidebar
-- **Meeting planner**: Drag a time slider to shift all cards simultaneously and find overlapping hours
+- **Time Shift**: Drag a time slider to shift all cards simultaneously and compare times across zones
 - **Time difference**: Each card shows relative offset from your local time (+3h, -5h, same)
 - **Base time**: Live mode or custom date/time; 12h and 24h format
 - **Sort**: By population or alphabetical
