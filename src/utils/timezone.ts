@@ -94,6 +94,7 @@ function getOffsetMinutes(date: Date, timezoneId: string): number | null {
     })
     const tzPart = parts.find((p) => p.type === 'timeZoneName')?.value
     if (!tzPart || !tzPart.startsWith('GMT')) return null
+    if (tzPart === 'GMT') return 0
     const match = tzPart.match(/GMT([+-])(\d{1,2}):?(\d{2})?/)
     if (!match) return null
     const sign = match[1] === '+' ? 1 : -1
