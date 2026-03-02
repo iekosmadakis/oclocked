@@ -30,6 +30,7 @@
   border: 1px solid var(--border);
   border-radius: var(--radius-sm);
   color: var(--text);
+  color-scheme: dark light;
   transition: border-color var(--transition);
 }
 

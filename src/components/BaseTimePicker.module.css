@@ -81,6 +81,7 @@
   border: 1px solid var(--border);
   border-radius: var(--radius);
   color: var(--text);
+  color-scheme: dark light;
   transition: border-color var(--transition);
 }
 
