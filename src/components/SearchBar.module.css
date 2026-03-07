@@ -126,6 +126,43 @@
   white-space: nowrap;
 }
 
+.right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+.time {
+  font-size: 12px;
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  color: var(--text-muted);
+}
+
+.diff {
+  font-size: 10px;
+  font-family: var(--font-mono);
+  font-weight: 600;
+  padding: 1px 5px;
+  border-radius: var(--radius-sm);
+}
+
+.diffAhead {
+  background: var(--accent-dim);
+  color: var(--accent);
+}
+
+.diffBehind {
+  background: rgba(239, 68, 68, .1);
+  color: var(--negative);
+}
+
+.diffSame {
+  background: var(--surface-hover);
+  color: var(--text-muted);
+}
+
 .add {
   font-size: 12px;
   font-weight: 500;

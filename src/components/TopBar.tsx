@@ -30,7 +30,7 @@ export function TopBar({
     <header className={styles.bar}>
       <Logo />
       <div className={styles.searchSlot}>
-        <SearchBar onAddTimezone={onAddTimezone} />
+        <SearchBar baseTime={baseTime} use24h={use24h} onAddTimezone={onAddTimezone} />
       </div>
       <div className={styles.controls}>
         <BaseTimePicker
