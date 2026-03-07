@@ -145,7 +145,7 @@ export function AppShell({
         <Sidebar baseTime={baseTime} use24h={use24h} />
       </main>
       <footer className={styles.footer}>
-        <p className={styles.tagline}>Because time is precious. Time zone math shouldn't be.</p>
+        <p className={styles.tagline}>World time, without the math.</p>
         <p className={styles.copyright}>Copyright © 2026 Ioannis E. Kosmadakis</p>
       </footer>
     </div>
