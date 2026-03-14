@@ -68,7 +68,7 @@ export function SearchBar({ baseTime, use24h, onAddTimezone }: SearchBarProps) {
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           onFocus={() => setFocused(true)}
-          placeholder="Search city or timezone"
+          placeholder="Search city..."
           className={styles.input}
           aria-label="Search timezones"
           aria-autocomplete="list"
