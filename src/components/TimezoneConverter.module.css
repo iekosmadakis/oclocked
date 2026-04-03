@@ -21,11 +21,16 @@
   margin-bottom: 10px;
 }
 
+.timeInputWrap {
+  position: relative;
+}
+
 .timeInput {
   width: 100%;
-  padding: 5px 6px;
+  padding: 6px 8px;
   font-size: 13px;
   font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
   background: var(--bg);
   border: 1px solid var(--border);
   border-radius: var(--radius-sm);
@@ -93,7 +98,7 @@
   cursor: pointer;
   font-size: 14px;
   color: var(--text-muted);
-  transition: color var(--transition), background var(--transition);
+  transition: color var(--transition), background var(--transition), border-color var(--transition);
 }
 
 .swap:hover {
@@ -106,13 +111,14 @@
   display: flex;
   align-items: baseline;
   gap: 8px;
-  padding: 8px;
+  padding: 8px 10px;
   background: var(--accent-dim);
-  border-radius: var(--radius-sm);
+  border: 1px solid transparent;
+  border-radius: var(--radius);
 }
 
 .resultTime {
-  font-size: 18px;
+  font-size: 16px;
   font-weight: 600;
   font-family: var(--font-mono);
   font-variant-numeric: tabular-nums;

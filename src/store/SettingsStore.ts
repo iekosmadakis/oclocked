@@ -3,11 +3,15 @@ import { STORAGE_KEYS, LEGACY_STORAGE_KEYS } from '../constants'
 export interface Settings {
   use24h: boolean
   theme: 'light' | 'dark' | 'system'
+  workStart: number
+  workEnd: number
 }
 
 const DEFAULTS: Settings = {
   use24h: true,
   theme: 'system',
+  workStart: 9,
+  workEnd: 17,
 }
 
 let migrated = false

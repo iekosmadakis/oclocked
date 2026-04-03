@@ -1,0 +1,334 @@
+.planner {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* Search */
+
+.header {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.searchArea { position: relative; }
+
+.searchInput {
+  width: 100%;
+  padding: 8px 12px;
+  font-size: 13px;
+  font-family: inherit;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text);
+  outline: none;
+  transition: border-color var(--transition);
+}
+
+.searchInput:focus { border-color: var(--accent); }
+.searchInput:disabled { opacity: .5; cursor: not-allowed; }
+
+.searchResults {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  right: 0;
+  max-height: 220px;
+  overflow-y: auto;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+  z-index: 1000;
+  animation: dropdownIn var(--transition-fast);
+}
+
+.searchRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  width: 100%;
+  padding: 8px 12px;
+  font-family: inherit;
+  font-size: 12px;
+  background: none;
+  border: none;
+  color: var(--text);
+  cursor: pointer;
+  text-align: left;
+  transition: background var(--transition);
+}
+
+.searchRow:hover { background: var(--surface-hover); }
+
+.searchCity { font-weight: 500; }
+
+.searchId {
+  font-size: 10px;
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+}
+
+/* Chips */
+
+.chips { display: flex; flex-wrap: wrap; gap: 6px; }
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 8px;
+  font-size: 11px;
+  font-weight: 500;
+  background: var(--accent-dim);
+  color: var(--accent);
+  border-radius: var(--radius-sm);
+}
+
+.chipLabel { white-space: nowrap; }
+
+.chipRemove {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  padding: 0;
+  font-size: 14px;
+  line-height: 1;
+  background: none;
+  border: none;
+  border-radius: 50%;
+  color: var(--accent);
+  cursor: pointer;
+  transition: background var(--transition);
+}
+
+.chipRemove:hover { background: rgba(124, 58, 237, .2); }
+
+/* Overlap summary */
+
+.overlapSummary {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 12px;
+  font-size: 13px;
+  font-weight: 500;
+  background: var(--accent-dim);
+  color: var(--accent);
+  border-radius: var(--radius);
+}
+
+.overlapIcon { font-size: 8px; }
+
+/* Empty state */
+
+.empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 180px;
+  color: var(--text-muted);
+  font-size: 14px;
+  text-align: center;
+}
+
+.emptyHint {
+  font-size: 12px;
+  opacity: .7;
+  margin-top: 4px;
+}
+
+.hint {
+  font-size: 12px;
+  color: var(--text-muted);
+  text-align: center;
+  margin: 0;
+}
+
+/* Timeline */
+
+.timeline {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.barsArea {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  position: relative;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.label {
+  flex-shrink: 0;
+  width: 130px;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  min-width: 0;
+}
+
+@media (max-width: 640px) {
+  .label { width: 90px; }
+}
+
+.labelCity {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.labelTime {
+  font-size: 11px;
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  color: var(--text-muted);
+}
+
+.labelOffset {
+  font-size: 10px;
+  font-family: var(--font-mono);
+  color: var(--text-muted);
+  opacity: .7;
+}
+
+/* Bar segments */
+
+.bar {
+  flex: 1;
+  display: flex;
+  gap: 1px;
+  height: 28px;
+  position: relative;
+}
+
+.bar .seg:first-child { border-radius: var(--radius-sm) 0 0 var(--radius-sm); }
+.bar .seg:last-child { border-radius: 0 var(--radius-sm) var(--radius-sm) 0; }
+
+.seg {
+  flex: 1;
+  min-width: 0;
+  position: relative;
+  transition: background var(--transition), opacity var(--transition);
+  cursor: default;
+}
+
+.seg:hover { opacity: .7; }
+
+.seg:hover::after {
+  content: attr(data-hour);
+  position: absolute;
+  bottom: calc(100% + 4px);
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 2px 6px;
+  font-size: 10px;
+  font-family: var(--font-mono);
+  font-weight: 500;
+  color: var(--text);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-sm);
+  white-space: nowrap;
+  z-index: 10;
+  pointer-events: none;
+}
+
+.segWork { background: var(--accent); opacity: .85; }
+.segNight { background: var(--surface-hover); }
+
+/* Hour labels */
+
+.hourLabels {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 2px;
+}
+
+.labelSpacer {
+  flex-shrink: 0;
+  width: 130px;
+}
+
+.hourTrackWrap {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.yourTime {
+  font-size: 9px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: .04em;
+  color: var(--text-muted);
+  opacity: .6;
+  text-align: right;
+}
+
+@media (max-width: 640px) {
+  .labelSpacer { width: 90px; }
+}
+
+.hourTrack {
+  flex: 1;
+  position: relative;
+  height: 16px;
+  overflow: visible;
+}
+
+.hourTick {
+  position: absolute;
+  transform: translateX(-50%);
+  font-size: 9px;
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  color: var(--text-muted);
+  opacity: .7;
+  text-align: center;
+}
+
+/* Now marker — positioned within a container that matches the bar area */
+
+.nowLineArea {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: calc(130px + 12px);
+  right: 0;
+  pointer-events: none;
+}
+
+@media (max-width: 640px) {
+  .nowLineArea { left: calc(90px + 12px); }
+}
+
+.nowMarker {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: var(--text-muted);
+  border-radius: 1px;
+  opacity: .5;
+}

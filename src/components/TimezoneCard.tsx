@@ -1,10 +1,11 @@
-import { memo } from 'react'
+import { memo, useState, useCallback, useRef } from 'react'
 import type { TimezoneItem } from '../types/timezone'
 import {
   getTimeInTimezone,
   getDateInTimezone,
   getUtcOffset,
   getTimeDiffHours,
+  getTimezoneAbbr,
   isDaytime,
   isDst,
 } from '../utils/timezone'
@@ -41,6 +42,9 @@ export const TimezoneCard = memo(function TimezoneCard({
   isFavorite,
   onToggleFavorite,
 }: TimezoneCardProps) {
+  const [copied, setCopied] = useState(false)
+  const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+
   const time = getTimeInTimezone(baseTime, item.id, use24h)
   const date = getDateInTimezone(baseTime, item.id)
   const offset = getUtcOffset(baseTime, item.id)
@@ -48,6 +52,18 @@ export const TimezoneCard = memo(function TimezoneCard({
   const dst = isDst(baseTime, item.id)
   const diffHours = getTimeDiffHours(baseTime, item.id, userTimezone)
   const showDate = date !== userDate
+
+  const handleCopyTime = useCallback((e: React.MouseEvent) => {
+    const abbr = getTimezoneAbbr(baseTime, item.id)
+    const text = e.shiftKey
+      ? `${getTimeInTimezone(baseTime, item.id, true)} ${offset} (${date})`
+      : `${time} ${abbr} (${date})`
+    navigator.clipboard.writeText(text).then(() => {
+      if (timerRef.current) clearTimeout(timerRef.current)
+      setCopied(true)
+      timerRef.current = setTimeout(() => setCopied(false), 1200)
+    })
+  }, [baseTime, item.id, use24h, time, date, offset])
 
   return (
     <article className={styles.card} data-timezone={item.id}>
@@ -62,7 +78,15 @@ export const TimezoneCard = memo(function TimezoneCard({
           {isFavorite ? '★' : '☆'}
         </button>
       </div>
-      <div className={styles.time}>{time}</div>
+      <div
+        className={`${styles.time} ${styles.timeCopyable}`}
+        onClick={handleCopyTime}
+        title="Click to copy · Shift+click for UTC format"
+        role="button"
+        tabIndex={0}
+      >
+        {copied ? 'Copied!' : time}
+      </div>
       <div className={styles.meta}>
         <span className={styles.offset}>{offset}</span>
         {diffHours !== null && (

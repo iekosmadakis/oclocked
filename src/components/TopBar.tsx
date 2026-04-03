@@ -12,6 +12,8 @@ interface TopBarProps {
   use24h: boolean
   isLive?: boolean
   theme: 'light' | 'dark' | 'system'
+  workStart: number
+  workEnd: number
   onSettingsChange: (s: SettingsType) => void
   onAddTimezone: (item: TimezoneItem) => void
 }
@@ -23,6 +25,8 @@ export function TopBar({
   use24h,
   isLive = true,
   theme,
+  workStart,
+  workEnd,
   onSettingsChange,
   onAddTimezone,
 }: TopBarProps) {
@@ -39,7 +43,7 @@ export function TopBar({
           use24h={use24h}
           isLive={isLive}
         />
-        <Settings use24h={use24h} theme={theme} onSettingsChange={onSettingsChange} />
+        <Settings use24h={use24h} theme={theme} workStart={workStart} workEnd={workEnd} onSettingsChange={onSettingsChange} />
       </div>
     </header>
   )

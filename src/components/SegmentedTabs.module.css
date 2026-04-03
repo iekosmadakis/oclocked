@@ -51,3 +51,20 @@
   color: var(--accent-fg);
   border-radius: var(--radius-sm);
 }
+
+.planner {
+  margin-left: 6px;
+  border-left: 1px solid var(--border);
+  padding-left: 14px;
+}
+
+.planner.active {
+  background: var(--accent-dim);
+  color: var(--accent);
+}
+
+.plannerIcon {
+  font-size: 11px;
+  margin-right: 4px;
+  opacity: .7;
+}

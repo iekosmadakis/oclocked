@@ -6,6 +6,7 @@ import { SortSelect } from './SortSelect'
 import { TimezoneGrid } from './TimezoneGrid'
 import { TimeSlider } from './TimeSlider'
 import { SkeletonCard } from './SkeletonCard'
+import { MeetingPlanner } from './MeetingPlanner'
 import type { TimezoneItem } from '../types/timezone'
 import type { SortOption } from '../utils/timezone'
 import type { Settings as SettingsType } from '../store/SettingsStore'
@@ -20,6 +21,8 @@ interface AppShellProps {
   isLive?: boolean
   use24h: boolean
   theme: 'light' | 'dark' | 'system'
+  workStart: number
+  workEnd: number
   onSettingsChange: (s: SettingsType) => void
   activeTab: TabId
   onTabChange: (tab: TabId) => void
@@ -76,6 +79,8 @@ export function AppShell({
   use24h,
   isLive = true,
   theme,
+  workStart,
+  workEnd,
   onSettingsChange,
   activeTab,
   onTabChange,
@@ -107,6 +112,8 @@ export function AppShell({
         use24h={use24h}
         isLive={isLive}
         theme={theme}
+        workStart={workStart}
+        workEnd={workEnd}
         onSettingsChange={onSettingsChange}
         onAddTimezone={onAddTimezone}
       />
@@ -118,28 +125,42 @@ export function AppShell({
               onTabChange={onTabChange}
               favoritesCount={favorites.length}
             />
-            <SortSelect value={sortBy} onChange={onSortChange} />
+            {activeTab !== 'planner' && (
+              <SortSelect value={sortBy} onChange={onSortChange} />
+            )}
           </div>
-          <TimeSlider
-            baseTime={baseTime}
-            onBaseTimeChange={onBaseTimeChange}
-            isLive={isLive}
-            use24h={use24h}
-          />
-          {isLoading ? (
-            <div className="grid">
-              {Array.from({ length: 12 }, (_, i) => (
-                <SkeletonCard key={`skeleton-${i}`} />
-              ))}
-            </div>
-          ) : (
-            <TimezoneGrid
-              items={displayItems}
+          {activeTab === 'planner' ? (
+            <MeetingPlanner
               baseTime={baseTime}
               use24h={use24h}
-              sortBy={sortBy}
               userTimezone={userTimezone}
+              workStart={workStart}
+              workEnd={workEnd}
             />
+          ) : (
+            <>
+              <TimeSlider
+                baseTime={baseTime}
+                onBaseTimeChange={onBaseTimeChange}
+                isLive={isLive}
+                use24h={use24h}
+              />
+              {isLoading ? (
+                <div className="grid">
+                  {Array.from({ length: 12 }, (_, i) => (
+                    <SkeletonCard key={`skeleton-${i}`} />
+                  ))}
+                </div>
+              ) : (
+                <TimezoneGrid
+                  items={displayItems}
+                  baseTime={baseTime}
+                  use24h={use24h}
+                  sortBy={sortBy}
+                  userTimezone={userTimezone}
+                />
+              )}
+            </>
           )}
         </div>
         <Sidebar baseTime={baseTime} use24h={use24h} />

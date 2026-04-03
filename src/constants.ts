@@ -8,6 +8,7 @@ export const REGION_ORDER = ['Europe', 'Americas', 'Asia', 'Africa', 'Oceania', 
 export const STORAGE_KEYS = {
   favorites: 'oclocked-favorites',
   settings: 'oclocked-settings',
+  planner: 'oclocked-planner',
 } as const
 
 /** Legacy keys for migration from previous "zonest" naming. */

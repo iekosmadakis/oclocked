@@ -100,6 +100,8 @@ export function App() {
       isLive={isLive}
       use24h={settings.use24h}
       theme={settings.theme}
+      workStart={settings.workStart}
+      workEnd={settings.workEnd}
       onSettingsChange={setSettings}
       activeTab={activeTab}
       onTabChange={setActiveTab}

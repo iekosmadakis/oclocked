@@ -75,7 +75,8 @@ export function getDateInTimezone(date: Date, timezoneId: string): string {
   }
 }
 
-function getOffsetMinutes(date: Date, timezoneId: string): number | null {
+/** Returns the UTC offset in minutes for a timezone (e.g. +330 for IST). */
+export function getOffsetMinutes(date: Date, timezoneId: string): number | null {
   try {
     const parts = formatPartsInZone(date, timezoneId, {
       timeZoneName: 'longOffset',
@@ -170,6 +171,16 @@ export function convertTime(
     return `${h12.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')} ${period}`
   } catch {
     return '--:--'
+  }
+}
+
+/** Returns the short timezone abbreviation (e.g. "EST", "CET") for a timezone at a given date. */
+export function getTimezoneAbbr(date: Date, timezoneId: string): string {
+  try {
+    const parts = formatPartsInZone(date, timezoneId, { timeZoneName: 'short' })
+    return parts.find((p) => p.type === 'timeZoneName')?.value ?? timezoneId
+  } catch {
+    return timezoneId
   }
 }
 

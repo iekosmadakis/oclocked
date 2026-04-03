@@ -62,28 +62,30 @@ export function TimezoneConverter({ use24h }: TimezoneConverterProps) {
       </div>
       <div className={styles.timeRow}>
         <label className={styles.label}>Time</label>
-        {use24h ? (
-          <input
-            type="time"
-            className={styles.timeInput}
-            value={toHHMM(hour, minute)}
-            onChange={(e) => {
-              const [h, m] = e.target.value.split(':').map(Number)
-              if (!isNaN(h) && !isNaN(m)) setHm({ hour: h, minute: m })
-            }}
-          />
-        ) : (
-          <input
-            type="text"
-            className={styles.timeInput}
-            value={to12h(hour, minute)}
-            onChange={(e) => {
-              const parsed = parse12h(e.target.value)
-              if (parsed) setHm(parsed)
-            }}
-            placeholder="h:mm AM/PM"
-          />
-        )}
+        <div className={styles.timeInputWrap}>
+          {use24h ? (
+            <input
+              type="time"
+              className={styles.timeInput}
+              value={toHHMM(hour, minute)}
+              onChange={(e) => {
+                const [h, m] = e.target.value.split(':').map(Number)
+                if (!isNaN(h) && !isNaN(m)) setHm({ hour: h, minute: m })
+              }}
+            />
+          ) : (
+            <input
+              type="text"
+              className={styles.timeInput}
+              value={to12h(hour, minute)}
+              onChange={(e) => {
+                const parsed = parse12h(e.target.value)
+                if (parsed) setHm(parsed)
+              }}
+              placeholder="h:mm AM/PM"
+            />
+          )}
+        </div>
       </div>
       <div className={styles.row}>
         <div className={styles.field}>

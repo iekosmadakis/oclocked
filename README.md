@@ -1,31 +1,35 @@
 # OClocked
 
-A timezone dashboard for viewing, comparing, and converting time zones across the world.
+Timezone dashboard built with React, TypeScript, and the Intl API. Compare times, plan meetings across zones, and convert between timezones — all client-side with zero backend.
 
 ## Features
 
-- Popular, Favorites, and All timezone tabs sorted by population
-- Inline search for any IANA timezone
-- Timezone converter sidebar (EST, UTC, PST, etc.)
-- Time slider to shift and compare times across zones
-- Live mode or custom date/time with 12h/24h format
-- Light, dark, and system theme
-- Responsive layout with collapsible sidebar
+- **Timezone grid** — Popular, Favorites, and All tabs with cards showing local time, UTC offset, DST status, and day/night indicator
+- **Meeting Planner** — 24h timeline for visualizing work hour overlap across up to 6 timezones, with configurable work hours
+- **Converter** — Quick conversion between common timezone abbreviations (EST, UTC, PST, CET, JST, etc.)
+- **Click-to-copy** — Click any card's time to copy; Shift+click for UTC offset format
+- **Search** — Find and add any IANA timezone
+- **Time shift** — Drag slider to compare times across all zones simultaneously
+- **Preferences** — 12h/24h format, light/dark/system theme, custom work hours — all persisted in localStorage
 
-## Development
+## Stack
+
+- **React 19** with strict mode, `memo`, and hook-based state management
+- **TypeScript 5.9** with strict compiler flags (`noUnusedLocals`, `noUnusedParameters`, `verbatimModuleSyntax`)
+- **Vite 7** for dev server (HMR) and production bundling
+- **CSS Modules** with custom properties for theming (light/dark/system)
+- **Intl API** (`DateTimeFormat`, `supportedValuesOf`) for timezone resolution, offset calculation, and DST detection — no third-party date libraries
+- **localStorage** for client-side persistence (settings, favorites, planner state)
+
+## Getting Started
 
 ```bash
 npm install
-npm run dev
+npm run dev       # dev server on localhost
+npm run build     # type-check + production build to dist/
 ```
 
-## Build
-
-```bash
-npm run build
-```
-
-Output goes to `dist/`. Deploy to any static host with SPA redirects (`/* -> /index.html`).
+Deploy `dist/` to any static host. Requires SPA redirect (`/* -> /index.html`).
 
 ## License
 
