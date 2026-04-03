@@ -4,7 +4,6 @@
   --accent: #7c3aed;
   --accent-fg: #fff;
   --accent-dim: rgba(124, 58, 237, .12);
-  --positive: #22c55e;
   --negative: #ef4444;
   --transition: 0.2s ease;
   --transition-fast: 0.12s ease;
@@ -28,7 +27,6 @@
 [data-theme="dark"] {
   --accent: #a78bfa;
   --accent-dim: rgba(167, 139, 250, .12);
-  --positive: #4ade80;
   --negative: #f87171;
   --bg: #0c1221;
   --text: #f1f5f9;

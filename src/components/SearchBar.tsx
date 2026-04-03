@@ -34,13 +34,20 @@ export function SearchBar({ baseTime, use24h, onAddTimezone }: SearchBarProps) {
   const [query, setQuery] = useState('')
   const [allTimezones, setAllTimezones] = useState<{ id: string; city: string }[]>([])
   const [focused, setFocused] = useState(false)
+  const [, setFavVersion] = useState(0)
   const wrapperRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     getTimezoneSearchList().then(setAllTimezones)
   }, [])
 
-  useClickOutside(wrapperRef, useCallback(() => setFocused(false), []))
+  useEffect(() => {
+    const handler = () => setFavVersion((v) => v + 1)
+    window.addEventListener(FAVORITES_EVENT, handler)
+    return () => window.removeEventListener(FAVORITES_EVENT, handler)
+  }, [])
+
+  useClickOutside(wrapperRef, useCallback(() => setFocused(false), []), focused)
 
   const results = useMemo(
     () => searchTimezones(query, allTimezones, 20),
@@ -48,7 +55,7 @@ export function SearchBar({ baseTime, use24h, onAddTimezone }: SearchBarProps) {
   )
 
   const showResults = focused && query.trim().length > 0
-  const favSet = useMemo(() => new Set(getFavorites()), [/* eslint-disable-line react-hooks/exhaustive-deps */ getFavorites()])
+  const favSet = new Set(getFavorites())
 
   const handleAdd = useCallback(
     (id: string, city: string) => {

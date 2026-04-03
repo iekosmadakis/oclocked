@@ -1,10 +1,5 @@
 export type SortOption = 'default' | 'alphabetical'
 
-const TIMEZONE_ALIASES: Record<string, string> = {
-  'Asia/Beijing': 'Asia/Shanghai',
-  'Pacific/Wellington': 'Pacific/Auckland',
-}
-
 /** Common timezone abbreviations mapped to IANA IDs. */
 export const TZ_ABBREVIATIONS: Record<string, string> = {
   UTC: 'UTC',
@@ -27,17 +22,12 @@ export const TZ_ABBREVIATIONS: Record<string, string> = {
   GST: 'Asia/Dubai',
 }
 
-function resolveTimezoneId(id: string): string {
-  return TIMEZONE_ALIASES[id] ?? id
-}
-
 function formatInZone(
   date: Date,
   timezoneId: string,
   options: Intl.DateTimeFormatOptions
 ): string {
-  const id = resolveTimezoneId(timezoneId)
-  return new Intl.DateTimeFormat('en-US', { ...options, timeZone: id }).format(date)
+  return new Intl.DateTimeFormat('en-US', { ...options, timeZone: timezoneId }).format(date)
 }
 
 function formatPartsInZone(
@@ -45,14 +35,12 @@ function formatPartsInZone(
   timezoneId: string,
   options: Intl.DateTimeFormatOptions
 ): Intl.DateTimeFormatPart[] {
-  const id = resolveTimezoneId(timezoneId)
-  return new Intl.DateTimeFormat('en-US', { ...options, timeZone: id }).formatToParts(date)
+  return new Intl.DateTimeFormat('en-US', { ...options, timeZone: timezoneId }).formatToParts(date)
 }
 
 export function isValidTimezone(timezoneId: string): boolean {
   try {
-    const id = resolveTimezoneId(timezoneId)
-    new Intl.DateTimeFormat('en-US', { timeZone: id }).format(new Date())
+    new Intl.DateTimeFormat('en-US', { timeZone: timezoneId }).format(new Date())
     return true
   } catch {
     return false
@@ -141,13 +129,12 @@ export function isDaytime(date: Date, timezoneId: string): boolean {
 
 export function isDst(date: Date, timezoneId: string): boolean {
   try {
-    const id = resolveTimezoneId(timezoneId)
     const y = date.getFullYear()
     const jan = new Date(y, 0, 15)
     const jul = new Date(y, 6, 15)
-    const janOff = getOffsetMinutes(jan, id)
-    const julOff = getOffsetMinutes(jul, id)
-    const nowOff = getOffsetMinutes(date, id)
+    const janOff = getOffsetMinutes(jan, timezoneId)
+    const julOff = getOffsetMinutes(jul, timezoneId)
+    const nowOff = getOffsetMinutes(date, timezoneId)
     if (janOff === null || julOff === null || nowOff === null) return false
     const std = Math.min(janOff, julOff)
     return nowOff !== std
@@ -165,12 +152,9 @@ export function convertTime(
   use24h: boolean
 ): string {
   try {
-    const fromId = resolveTimezoneId(fromTz)
-    const toId = resolveTimezoneId(toTz)
-
     const ref = new Date()
-    const fromOff = getOffsetMinutes(ref, fromId)
-    const toOff = getOffsetMinutes(ref, toId)
+    const fromOff = getOffsetMinutes(ref, fromTz)
+    const toOff = getOffsetMinutes(ref, toTz)
     if (fromOff === null || toOff === null) return '--:--'
 
     let totalMin = hour * 60 + minute + (toOff - fromOff)

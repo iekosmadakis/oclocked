@@ -38,14 +38,12 @@ export function addFavorite(id: string): void {
   }
 }
 
-/** Removes a timezone ID from favorites. */
-export function removeFavorite(id: string): void {
+function removeFavorite(id: string): void {
   const favs = getFavorites().filter((f) => f !== id)
   localStorage.setItem(STORAGE_KEYS.favorites, JSON.stringify(favs))
 }
 
-/** Returns true if the timezone ID is in favorites. */
-export function isFavorite(id: string): boolean {
+function isFavorite(id: string): boolean {
   return getFavorites().includes(id)
 }
 

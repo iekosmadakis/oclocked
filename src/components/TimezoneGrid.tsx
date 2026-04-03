@@ -32,7 +32,7 @@ export function TimezoneGrid({
     return () => window.removeEventListener(FAVORITES_EVENT, handler)
   }, [])
 
-  const favSet = useMemo(() => new Set(getFavorites()), [/* eslint-disable-line react-hooks/exhaustive-deps */ getFavorites()])
+  const favSet = new Set(getFavorites())
 
   const { byRegion, validCount } = useMemo(() => {
     const validItems = items.filter(
@@ -72,7 +72,7 @@ export function TimezoneGrid({
       : [...byRegion.keys()].sort() as string[]
 
   return (
-    <div className={styles.wrapper}>
+    <div>
       {regionOrder.map((region) => {
         const regionItems = byRegion.get(region)
         if (!regionItems?.length) return null
